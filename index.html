@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A simple, open-source clinic administration demo for appointments and therapy records.">
+<title>AyurCare — Clinic Desk</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#"><span class="brand-mark">✳</span><span>AyurCare<small>CLINIC DESK</small></span></a>
+  <div class="top-actions"><span class="status-dot"></span><span>Local demo</span><button id="exportBtn" class="button button-light">Export data</button></div>
+</header>
+<main class="layout">
+  <aside class="sidebar">
+    <p class="nav-label">WORKSPACE</p>
+    <button class="nav-item active" data-view="dashboard">▦ <span>Dashboard</span></button>
+    <button class="nav-item" data-view="patients">♙ <span>Patients</span></button>
+    <button class="nav-item" data-view="appointments">▣ <span>Appointments</span></button>
+    <button class="nav-item" data-view="therapies">✚ <span>Therapy records</span></button>
+    <div class="sidebar-note"><strong>Demo workspace</strong><p>Data is stored in this browser only. Use fictional details while testing.</p></div>
+  </aside>
+  <section class="content">
+    <div id="dashboardView" class="view">
+      <div class="page-heading"><div><p class="eyebrow">OVERVIEW</p><h1>Good day, Doctor.</h1><p class="muted">Here’s your clinic activity at a glance.</p></div><button class="button button-primary" id="quickAdd">＋ Add patient</button></div>
+      <div class="stats">
+        <article class="stat-card"><span class="stat-icon green">♙</span><p>Total patients</p><strong id="patientCount">0</strong><small>Registered in this browser</small></article>
+        <article class="stat-card"><span class="stat-icon peach">▣</span><p>Appointments</p><strong id="appointmentCount">0</strong><small>All recorded appointments</small></article>
+        <article class="stat-card"><span class="stat-icon blue">✚</span><p>Therapy records</p><strong id="therapyCount">0</strong><small>Sessions documented</small></article>
+      </div>
+      <div class="panel"><div class="panel-heading"><div><h2>Upcoming appointments</h2><p class="muted">Your next scheduled visits</p></div><button class="text-button" data-go="appointments">View all →</button></div><div id="upcomingList" class="empty-state">No appointments yet. Add one from the Appointments page.</div></div>
+      <div class="notice"><strong>Privacy reminder</strong><span>This is a starter project, not a certified medical-record system. Do not enter real patient data. Add authentication, encryption, backups and legal/privacy review before any real-world deployment.</span></div>
+    </div>
+
+    <div id="patientsView" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">PEOPLE</p><h1>Patients</h1><p class="muted">Register and manage demo patient profiles.</p></div><button class="button button-primary" id="addPatientBtn">＋ Add patient</button></div>
+      <div class="panel"><div class="toolbar"><input id="patientSearch" type="search" placeholder="Search by name or phone…" aria-label="Search patients"></div><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Age</th><th>Phone</th><th>Registered</th><th></th></tr></thead><tbody id="patientRows"></tbody></table></div><div id="patientEmpty" class="empty-state">No patients added yet.</div></div>
+    </div>
+
+    <div id="appointmentsView" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">SCHEDULING</p><h1>Appointments</h1><p class="muted">Keep track of planned clinic visits.</p></div><button class="button button-primary" id="addAppointmentBtn">＋ New appointment</button></div>
+      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Date</th><th>Time</th><th>Purpose</th><th>Status</th><th></th></tr></thead><tbody id="appointmentRows"></tbody></table></div><div id="appointmentEmpty" class="empty-state">No appointments recorded yet.</div></div>
+    </div>
+
+    <div id="therapiesView" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">DOCUMENTATION</p><h1>Therapy records</h1><p class="muted">Record a session that has already been clinically assessed and performed.</p></div><button class="button button-primary" id="addTherapyBtn">＋ Add record</button></div>
+      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Date</th><th>Procedure / therapy</th><th>Notes</th><th></th></tr></thead><tbody id="therapyRows"></tbody></table></div><div id="therapyEmpty" class="empty-state">No therapy records yet.</div></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="patientDialog" class="modal">
+<form id="patientForm" method="dialog">
+  <div class="modal-heading"><div><p class="eyebrow">PATIENT PROFILE</p><h2>Add patient</h2></div><button type="button" class="close" data-close>×</button></div>
+  <label>Full name<input name="name" required maxlength="80" placeholder="e.g. Anil Kumar"></label>
+  <div class="form-grid"><label>Age<input name="age" type="number" min="0" max="120" required></label><label>Phone<input name="phone" type="tel" maxlength="20" placeholder="Optional"></label></div>
+  <label>General notes<textarea name="notes" rows="3" maxlength="500" placeholder="Demo notes only"></textarea></label>
+  <div class="modal-actions"><button type="button" class="button button-light" data-close>Cancel</button><button class="button button-primary" type="submit">Save patient</button></div>
+</form>
+</dialog>
+
+<dialog id="appointmentDialog" class="modal">
+<form id="appointmentForm" method="dialog">
+  <div class="modal-heading"><div><p class="eyebrow">SCHEDULING</p><h2>New appointment</h2></div><button type="button" class="close" data-close>×</button></div>
+  <label>Patient<select name="patientId" required id="appointmentPatient"></select></label>
+  <div class="form-grid"><label>Date<input name="date" type="date" required></label><label>Time<input name="time" type="time" required></label></div>
+  <label>Purpose<input name="purpose" maxlength="120" required placeholder="e.g. Follow-up consultation"></label>
+  <div class="modal-actions"><button type="button" class="button button-light" data-close>Cancel</button><button class="button button-primary" type="submit">Save appointment</button></div>
+</form>
+</dialog>
+
+<dialog id="therapyDialog" class="modal">
+<form id="therapyForm" method="dialog">
+  <div class="modal-heading"><div><p class="eyebrow">SESSION DOCUMENTATION</p><h2>Add therapy record</h2></div><button type="button" class="close" data-close>×</button></div>
+  <label>Patient<select name="patientId" required id="therapyPatient"></select></label>
+  <div class="form-grid"><label>Date<input name="date" type="date" required></label><label>Procedure / therapy<input name="procedure" maxlength="100" required placeholder="Name of procedure"></label></div>
+  <label>Session notes<textarea name="notes" rows="3" maxlength="500" placeholder="Document observations, duration and response"></textarea></label>
+  <p class="form-hint">This form only records a completed session; it does not recommend or prescribe treatment.</p>
+  <div class="modal-actions"><button type="button" class="button button-light" data-close>Cancel</button><button class="button button-primary" type="submit">Save record</button></div>
+</form>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
